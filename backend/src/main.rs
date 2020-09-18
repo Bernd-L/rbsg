@@ -19,19 +19,17 @@ async fn manual_hello() -> impl Responder {
 async fn main() -> std::io::Result<()> {
     println!("Starting...");
 
-    let binding: String = env::var("RBSG_BIND").unwrap_or(String::from("0.0.0.0:8080"));
-
-    let server = HttpServer::new(|| {
+    let future = HttpServer::new(|| {
         App::new()
             .service(hello)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
     })
-    .bind(&binding)?;
-
-    let future = server.run();
+    .bind(env::var("RBSG_BIND").unwrap_or(String::from("0.0.0.0:8080")))?
+    .run();
 
     println!("Started");
 
+    // Don't exit the app; the server needs to keep running
     future.await
 }
