@@ -21,13 +21,17 @@ async fn main() -> std::io::Result<()> {
 
     let binding: String = env::var("RBSG_BIND").unwrap_or(String::from("0.0.0.0:8080"));
 
-    HttpServer::new(|| {
+    let server = HttpServer::new(|| {
         App::new()
             .service(hello)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
     })
-    .bind(&binding)?
-    .run()
-    .await
+    .bind(&binding)?;
+
+    let future = server.run();
+
+    println!("Started");
+
+    future.await
 }
