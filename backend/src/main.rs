@@ -29,6 +29,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(hello)
             .service(echo)
+            // .service(web::resource("/{project_id}").route(web::get().to(|| HttpResponse::Ok())))
             .route("/hey", web::get().to(manual_hello))
             .route("/count", web::get().to(stateful_counter))
     })
