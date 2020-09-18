@@ -15,15 +15,22 @@ async fn manual_hello() -> impl Responder {
     HttpResponse::Ok().body("Hey there!")
 }
 
+async fn stateful_counter() -> impl Responder {
+    HttpResponse::Ok().body("0")
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     println!("Starting...");
+
+    let mut stateful_count = 0;
 
     let future = HttpServer::new(|| {
         App::new()
             .service(hello)
             .service(echo)
             .route("/hey", web::get().to(manual_hello))
+            .route("/count", web::get().to(stateful_counter))
     })
     .bind(env::var("RBSG_BIND").unwrap_or(String::from("0.0.0.0:8080")))?
     .run();
