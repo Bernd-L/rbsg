@@ -1,5 +1,4 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
-use std::{env, sync::Mutex};
+use actix_web::web;
 
 pub fn config(cfg: &mut web::ServiceConfig) {
   cfg.service(web::scope("/v1"));

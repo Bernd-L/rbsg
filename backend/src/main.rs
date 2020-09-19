@@ -1,7 +1,7 @@
 mod routes;
 
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
-use std::{env, sync::Mutex};
+use actix_web::{App, HttpServer};
+use std::env;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
