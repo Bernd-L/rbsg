@@ -1,5 +1,5 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
-use std::env;
+use std::{env, sync::Mutex};
 
 #[get("/")]
 async fn hello() -> impl Responder {
@@ -15,23 +15,38 @@ async fn manual_hello() -> impl Responder {
     HttpResponse::Ok().body("Hey there!")
 }
 
-async fn stateful_counter() -> impl Responder {
-    HttpResponse::Ok().body("0")
+#[get("/count")]
+async fn stateful_counter(data: web::Data<CountState>) -> impl Responder {
+    // Get the count from the Mutex
+    let mut cnt = data.count.lock().unwrap();
+
+    // Increment
+    *cnt += 1;
+
+    // Send a response
+    HttpResponse::Ok().body(format!("Count at: {}", cnt))
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     println!("Starting...");
 
-    let mut stateful_count = 0;
+    let demo_data = web::Data::new(CountState {
+        count: Mutex::new(0),
+    });
 
-    let future = HttpServer::new(|| {
+    let future = HttpServer::new(move || {
         App::new()
-            .service(hello)
-            .service(echo)
             // .service(web::resource("/{project_id}").route(web::get().to(|| HttpResponse::Ok())))
-            .route("/hey", web::get().to(manual_hello))
-            .route("/count", web::get().to(stateful_counter))
+            .service(
+                web::scope("/demo")
+                    .app_data(demo_data.clone())
+                    .route("/hey", web::get().to(manual_hello))
+                    .service(stateful_counter)
+                    .service(echo)
+                    .service(hello),
+            )
+            .service(web::scope("/api").service(web::scope("/v1")))
     })
     .bind(env::var("RBSG_BIND").unwrap_or(String::from("0.0.0.0:8080")))?
     .run();
@@ -40,4 +55,8 @@ async fn main() -> std::io::Result<()> {
 
     // Don't exit the app; the server needs to keep running
     future.await
+}
+
+struct CountState {
+    count: Mutex<usize>,
 }
