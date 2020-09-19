@@ -6,15 +6,17 @@ pub fn config(cfg: &mut web::ServiceConfig) {
     count: Mutex::new(0),
   });
 
-  cfg
-    .data(demo_data.clone())
-    .route("/hey", web::get().to(manual_hello))
-    .service(stateful_counter)
-    .service(echo)
-    .service(hello);
+  cfg.service(
+    web::scope("/")
+      .app_data(demo_data.clone())
+      .route("/hey", web::get().to(manual_hello))
+      .service(stateful_counter)
+      .service(echo)
+      .service(hello),
+  );
 }
 
-#[get("/")]
+#[get("/hw")]
 async fn hello() -> impl Responder {
   HttpResponse::Ok().body("Hello world!")
 }
