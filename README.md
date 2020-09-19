@@ -2,6 +2,8 @@
 
 Rust-based social graph
 
+FYI: This project is in its early design & idea phase, and it'll be a long while until the first beta will be ready.
+
 ## Purpose
 
 This application should eventually provice overview over one's contacts.
