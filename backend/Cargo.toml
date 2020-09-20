@@ -16,3 +16,4 @@ include = ["/README.md", "../LICENSE.md", "/Cargo.toml", "/Cargo.lock", "/src"]
 [dependencies]
 actix-web = { version = "3", features = ["openssl"] }
 openssl = { version = "0.10" }
+rusted_cypher = "1.1.0"
