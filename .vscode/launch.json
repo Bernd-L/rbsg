@@ -9,7 +9,7 @@
       "request": "launch",
       "name": "Debug",
       "preLaunchTask": "${defaultBuildTask}",
-      "program": "${workspaceFolder}/backend/target/debug/rbsg-backend",
+      "program": "${workspaceFolder}/target/debug/rbsg-backend",
       "args": [],
       "console": "internalConsole",
       "cwd": "${workspaceFolder}"

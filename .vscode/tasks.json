@@ -9,13 +9,7 @@
         "kind": "build",
         "isDefault": true
       },
-      "label": "Rust: cargo build - backend"
-    },
-    {
-      "type": "cargo",
-      "subcommand": "run",
-      "problemMatcher": ["$rustc"],
-      "label": "Rust: cargo run - backend"
+      "label": "Rust: cargo build - rbsg"
     }
   ]
 }
