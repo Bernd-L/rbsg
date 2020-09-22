@@ -9,7 +9,15 @@
         "kind": "build",
         "isDefault": true
       },
-      "label": "Rust: cargo build - rbsg"
+      "label": "Rust: cargo build - rbsg",
+      "dependsOn": ["Rust: wasm build"]
+    },
+    {
+      "type": "shell",
+      "command": "wasm-pack build --target web --out-name rbsg --out-dir ../target/static",
+      "options": { "cwd": "${cwd}/frontend" },
+      "group": "build",
+      "label": "Rust: wasm build"
     }
   ]
 }
